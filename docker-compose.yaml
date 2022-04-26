@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      dockerfile: ./app.dockerfile
+      context: .
+    volumes:
+      - ./app:/var/www/app
+  web:
+    build:
+      dockerfile: ./web.dockerfile
+      context: .
+    ports:
+      - 80:80
+    volumes:
+      - ./app:/var/www/app
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+      MARIADB_DATABASE: laravel
+    volumes:
+      - dbdata:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+volumes:
+  dbdata:
